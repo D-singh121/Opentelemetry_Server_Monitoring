@@ -1,0 +1,26 @@
+version: "3"
+services:
+  tempo:
+    container_name: tempo
+    image: grafana/tempo:latest
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./tempo.yaml:/etc/tempo.yaml
+    ports:
+      - "4318:4318"
+      - "3200:3200"
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml
+      - grafana-storage:/var/lib/grafana
+    env_file:
+      - .env
+
+volumes:
+  grafana-storage:
+    name: grafana-storage
